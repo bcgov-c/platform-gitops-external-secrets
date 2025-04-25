@@ -16,6 +16,7 @@ env:
 
 jobs:
   repo_setup:
+    if: $ESO_TAG != 'main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,10 +29,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Create a new branch and remove all tracked files
+      - name: Create a new branch and remove the external-secrets directory
         run: |
           git checkout -b $ESO_TAG
-          git ls-files -z | xargs -0 rm -f
+          git rm -rf external-secrets
 
       - name: Download external-secrets version package and unpack
         run: |
