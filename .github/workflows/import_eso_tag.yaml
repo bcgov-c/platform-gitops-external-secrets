@@ -16,7 +16,7 @@ env:
 
 jobs:
   repo_setup:
-    if: ${{ env.ESO_TAG != 'main' }}
+    if: ${{ inputs.tag != 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
