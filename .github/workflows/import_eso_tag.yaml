@@ -29,9 +29,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Create a new branch and remove the external-secrets directory
+      - name: Create a new branch and remove the external-secrets directory.  Fail if branch already exists.
         run: |
-          git checkout -B $ESO_TAG
+          git checkout -b $ESO_TAG
           if [ -d external-secrets ]; then git rm -rf external-secrets; fi
 
       - name: Download external-secrets version package and unpack
