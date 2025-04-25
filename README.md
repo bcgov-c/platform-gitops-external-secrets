@@ -1,0 +1,1 @@
+# platform-gitops-external-secrets
