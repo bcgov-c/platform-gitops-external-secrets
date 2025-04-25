@@ -31,7 +31,7 @@ jobs:
 
       - name: Create a new branch and remove the external-secrets directory
         run: |
-          git checkout -b $ESO_TAG
+          git checkout -B $ESO_TAG
           git rm -rf external-secrets
 
       - name: Download external-secrets version package and unpack
