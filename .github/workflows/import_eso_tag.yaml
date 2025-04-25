@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          persistent-credentials: true
+          persist-credentials: true
 
       - name: Configure git
         run: |
