@@ -24,6 +24,8 @@ jobs:
         with:
           persist-credentials: true
 
+      # Check out the external-secrets git repo using the provided version tag
+      # ----------------------------------------------------------------------
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
@@ -40,9 +42,24 @@ jobs:
           tar xzvf external-secrets.tgz
           rm external-secrets.tgz
 
-      - name: Apply all changes
+      - name: Apply git repo changes
         run: |
           git add -A
           git commit -a -m "Adding tag $ESO_TAG"
           git push origin $ESO_TAG
+
+      # Pull the related image and put it in Artifactory
+      # ------------------------------------------------
+      - name: Log in to Artifactory
+        run: |
+          echo "${{ secrets.ARTIFACTORY_PASSWORD }}" | docker login ${{ secrets.ARTIFACTORY_URL }} -u ${{ secrets.ARTIFACTORY_USERNAME }} --password-stdin
+
+      - name: Pull the operator image from oci.external-secrets.io
+        run: docker pull oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG}
+
+      - name: Tag image for Artifactory
+        run: docker tag oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG} ${{ secrets.ARTIFACTORY_URL }}/plat-util-images/external-secrets:v${ESO_TAG}
+
+      - name: Push image to Artifactory
+        run: docker push ${{ secrets.ARTIFACTORY_URL }}/plat-util-images/external-secrets:v${ESO_TAG}
 
