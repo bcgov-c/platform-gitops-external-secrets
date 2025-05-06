@@ -54,12 +54,26 @@ jobs:
         run: |
           echo "${{ secrets.ARTIFACTORY_PASSWORD }}" | docker login "https://${{ secrets.ARTIFACTORY_URL }}" -u ${{ secrets.ARTIFACTORY_USERNAME }} --password-stdin
 
-      - name: Pull the operator image from oci.external-secrets.io
-        run: docker pull --arch amd64 oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG}
+      #- name: Pull the operator image from oci.external-secrets.io
+      #  run: docker pull --arch amd64 oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG}
 
-      - name: Tag image for Artifactory
-        run: docker tag oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG} ${{ secrets.ARTIFACTORY_URL }}/plat-util-images/external-secrets:v${ESO_TAG}
+      #- name: Tag image for Artifactory
+      #  run: docker tag oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG} ${{ secrets.ARTIFACTORY_URL }}/plat-util-images/external-secrets:v${ESO_TAG}
 
-      - name: Push image to Artifactory
-        run: docker push ${{ secrets.ARTIFACTORY_URL }}/plat-util-images/external-secrets:v${ESO_TAG}
+      #- name: Push image to Artifactory
+      #  run: docker push ${{ secrets.ARTIFACTORY_URL }}/plat-util-images/external-secrets:v${ESO_TAG}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Mirror the external-secrets image for amd64
+        run: |
+          docker buildx build \
+            --platform linux/amd64 \
+            --tag ${{ secrets.ARTIFACTORY_URL }}/plat-util-images/external-secrets:v${ESO_TAG} \
+            --push \
+            --build-arg BASE_IMAGE=oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG} \
+            --file Dockerfile.mirror \
+            .
+
 
