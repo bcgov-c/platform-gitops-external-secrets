@@ -55,7 +55,7 @@ jobs:
           echo "${{ secrets.ARTIFACTORY_PASSWORD }}" | docker login "https://${{ secrets.ARTIFACTORY_URL }}" -u ${{ secrets.ARTIFACTORY_USERNAME }} --password-stdin
 
       - name: Pull the operator image from oci.external-secrets.io
-        run: docker pull oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG}
+        run: docker pull --arch amd64 oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG}
 
       - name: Tag image for Artifactory
         run: docker tag oci.external-secrets.io/external-secrets/external-secrets:v${ESO_TAG} ${{ secrets.ARTIFACTORY_URL }}/plat-util-images/external-secrets:v${ESO_TAG}
