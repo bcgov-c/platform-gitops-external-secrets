@@ -44,8 +44,9 @@ jobs:
 
       - name: Apply git repo changes
         run: |
-          git add -A
-          git commit -a -m "Adding tag $ESO_TAG"
+          #git add -A
+          git add .
+          git commit -a -m "Setting tag $ESO_TAG"
           git push origin $ESO_TAG
 
       # Pull the related image and put it in Artifactory
