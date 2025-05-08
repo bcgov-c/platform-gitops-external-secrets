@@ -31,12 +31,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Create a new branch and remove the external-secrets directory.  Fail if branch already exists.
+      - name: Create/reset branch and remove the external-secrets directory
         run: |
-          git checkout -b $ESO_TAG
+          git checkout -B $ESO_TAG
           if [ -d external-secrets ]; then git rm -rf external-secrets; fi
 
-      - name: Download external-secrets version package and unpack
+      - name: Download external-secrets package and unpack
         run: |
           curl -sSL -o external-secrets.tgz https://github.com/external-secrets/external-secrets/releases/download/helm-chart-${ESO_TAG}/external-secrets-${ESO_TAG}.tgz
           tar xzvf external-secrets.tgz
